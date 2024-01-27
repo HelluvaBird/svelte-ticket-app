@@ -32,7 +32,7 @@
 								<span class="badge variant-filled">{row.status}</span>
 							</td>
 							<td class="grid">
-								<button type="button" class="btn variant-filled-primary">Button</button>
+								<a href={`/ticket/${row.id}`} class="btn variant-filled-primary">View</a>
 							</td>
 						</tr>
 					{/each}
