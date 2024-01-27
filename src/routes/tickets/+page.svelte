@@ -1,11 +1,9 @@
 <script lang="ts">
-	const sourceData = [
-		{ id: 1, product: 'Macbook', date: 1.0079, status: 'new' },
-		{ id: 2, product: 'iPhone/iPad', date: 4.0026, status: 'new' },
-		{ id: 3, product: 'Macbook', date: 6.941, status: 'new' },
-		{ id: 4, product: 'Apple Watch', date: 9.0122, status: 'new' },
-		{ id: 5, product: 'Macbook', date: 10.811, status: 'new' }
-	];
+	import type { PageData } from './$types';
+
+	export let data: PageData;
+
+	$: ({ tickets } = data);
 </script>
 
 <div class="p-10">
@@ -24,15 +22,15 @@
 					</tr>
 				</thead>
 				<tbody>
-					{#each sourceData as row (row.id)}
+					{#each tickets as row (row._id)}
 						<tr>
-							<td class="!align-middle">{row.date}</td>
+							<td class="!align-middle">{row.createdAt}</td>
 							<td class="!align-middle">{row.product}</td>
 							<td class="!align-middle">
 								<span class="badge variant-filled">{row.status}</span>
 							</td>
 							<td class="grid">
-								<a href={`/ticket/${row.id}`} class="btn variant-filled-primary">View</a>
+								<a href={`/ticket/${row._id}`} class="btn variant-filled-primary">View</a>
 							</td>
 						</tr>
 					{/each}
