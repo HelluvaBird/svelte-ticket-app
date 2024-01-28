@@ -1,3 +1,4 @@
+import type { TicketModelType } from '$lib/types/types';
 import mongoose from 'mongoose';
 
 const ticketSchema = new mongoose.Schema(
@@ -21,4 +22,5 @@ const ticketSchema = new mongoose.Schema(
 	{ timestamps: true }
 );
 
-export const TicketModel = mongoose.models.Ticket ?? mongoose.model('Ticket', ticketSchema);
+export const TicketModel: mongoose.Model<TicketModelType> =
+	mongoose.models.Ticket ?? mongoose.model<TicketModelType>('Ticket', ticketSchema);

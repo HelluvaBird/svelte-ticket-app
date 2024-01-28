@@ -1,14 +1,19 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	const data = { id: 1, product: 'Macbook', date: 1.0079, status: 'new', description: 'hey there' };
+	import { formatDate } from '$lib/utils/formatDate';
+	import type { PageData } from './$types';
+	export let data: PageData;
+	$: ({ ticket } = data);
 </script>
 
 <div class="p-10">
 	<div class="max-w-[56rem] mx-auto space-y-4">
 		<h2 class="h2">Ticket ID: {$page.params?.id}</h2>
-		<p><span class="text-base badge variant-filled-success">{data.status}</span></p>
-		<p>Date Submitted: {data.date}</p>
-		<p>Product: {data.product}</p>
+		<p><span class="text-base badge variant-filled-success">{ticket?.status}</span></p>
+		{#if ticket?.createdAt}
+			<p>Date Submitted: {formatDate(ticket?.createdAt)}</p>
+		{/if}
+		<p>Product: {ticket?.product}</p>
 		<hr />
 		<div class="alert variant-filled">
 			<div class="hidden sm:block">
@@ -30,7 +35,7 @@
 			<!-- Message -->
 			<div class="alert-message">
 				<h3 class="h3">Description of the issue</h3>
-				<p>{data.description}</p>
+				<p>{ticket?.description}</p>
 			</div>
 		</div>
 		<p>Notes</p>
