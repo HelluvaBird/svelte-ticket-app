@@ -1,9 +1,12 @@
 <script lang="ts">
-	import { AppShell } from '@skeletonlabs/skeleton';
+	import { AppShell, Modal, initializeStores } from '@skeletonlabs/skeleton';
+	initializeStores();
 	import { AppRail, AppRailAnchor } from '@skeletonlabs/skeleton';
 	import { AppBar } from '@skeletonlabs/skeleton';
 	import '../app.postcss';
 </script>
+
+<Modal />
 
 <AppShell>
 	<svelte:fragment slot="header">

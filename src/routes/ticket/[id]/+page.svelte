@@ -4,6 +4,32 @@
 	import type { PageData } from './$types';
 	export let data: PageData;
 	$: ({ ticket } = data);
+
+	import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
+
+	const modalStore = getModalStore();
+
+	const closeTicketModal: ModalSettings = {
+		type: 'confirm',
+		// Data
+		title: 'Please Confirm',
+		body: 'Are you sure you wish to close the ticket?',
+		buttonTextConfirm: 'Close Ticket',
+		// TRUE if confirm pressed, FALSE if cancel pressed
+		response: (r: boolean) => console.log('response:', r)
+	};
+	const addNoteModal: ModalSettings = {
+		type: 'prompt',
+		// Data
+		title: 'Add Note',
+		body: 'Provide a message with any additional information.',
+		// Populates the input value and attributes
+		value: '',
+		valueAttr: { type: 'text', minlength: 3, maxlength: 10, required: true },
+		buttonTextSubmit: 'Add Note',
+		// Returns the updated response value
+		response: (r: string) => console.log('response:', r)
+	};
 </script>
 
 <div class="p-10">
@@ -39,7 +65,11 @@
 			</div>
 		</div>
 		<p>Notes</p>
-		<button type="button" class="btn variant-filled-primary">
+		<button
+			type="button"
+			class="btn variant-filled-primary"
+			on:click={() => modalStore.trigger(addNoteModal)}
+		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
@@ -74,7 +104,11 @@
 			</div>
 		</div>
 		<div class="grid">
-			<button type="button" class="btn variant-filled-error">
+			<button
+				type="button"
+				class="btn variant-filled-error"
+				on:click={() => modalStore.trigger(closeTicketModal)}
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
