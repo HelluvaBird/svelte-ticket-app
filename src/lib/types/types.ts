@@ -6,3 +6,11 @@ export type TicketModelType = {
 	createdAt?: Date;
 	updatedAt?: Date;
 };
+
+export type NoteModelType = {
+	_id: string;
+	ticketId: string;
+	message: string;
+	createdAt?: Date;
+	updatedAt?: Date;
+};
