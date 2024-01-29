@@ -32,7 +32,13 @@
 							</td>
 							<td class="!align-middle">{row.product}</td>
 							<td class="!align-middle">
-								<span class="badge variant-filled">{row.status}</span>
+								<span
+									class="badge variant-filled{row.status === 'new'
+										? '-success'
+										: row.status === 'closed'
+											? '-error'
+											: ''}">{row.status}</span
+								>
 							</td>
 							<td class="grid">
 								<a href={`/ticket/${row._id}`} class="btn variant-filled-primary">View</a>

@@ -1,13 +1,15 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { formatDate } from '$lib/utils/formatDate';
+	import { goto } from '$app/navigation';
+	import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
+	import { formatDate } from '$lib/utils/formatDate';
+
 	export let data: PageData;
 	$: ({ ticket } = data);
 
-	import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
-
 	const modalStore = getModalStore();
+	let loading = false;
 
 	const closeTicketModal: ModalSettings = {
 		type: 'confirm',
@@ -16,8 +18,19 @@
 		body: 'Are you sure you wish to close the ticket?',
 		buttonTextConfirm: 'Close Ticket',
 		// TRUE if confirm pressed, FALSE if cancel pressed
-		response: (r: boolean) => console.log('response:', r)
+		response: (r: boolean) => r && closeTicket()
 	};
+
+	async function closeTicket() {
+		loading = true;
+		await fetch(`/api/ticket/${$page.params?.id}`, {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		goto('/tickets');
+	}
 	const addNoteModal: ModalSettings = {
 		type: 'prompt',
 		// Data
@@ -35,7 +48,15 @@
 <div class="p-10">
 	<div class="max-w-[56rem] mx-auto space-y-4">
 		<h2 class="h2">Ticket ID: {$page.params?.id}</h2>
-		<p><span class="text-base badge variant-filled-success">{ticket?.status}</span></p>
+		<p>
+			<span
+				class="text-base badge variant-filled{ticket?.status === 'new'
+					? '-success'
+					: ticket?.status === 'closed'
+						? '-error'
+						: ''}">{ticket?.status}</span
+			>
+		</p>
 		{#if ticket?.createdAt}
 			<p>Date Submitted: {formatDate(ticket?.createdAt)}</p>
 		{/if}
@@ -68,6 +89,7 @@
 		<button
 			type="button"
 			class="btn variant-filled-primary"
+			class:hidden={ticket?.status === 'closed'}
 			on:click={() => modalStore.trigger(addNoteModal)}
 		>
 			<svg
@@ -103,7 +125,7 @@
 				<p>We are on the problem like Donkey Kong!</p>
 			</div>
 		</div>
-		<div class="grid">
+		<div class="grid" class:hidden={ticket?.status === 'closed'}>
 			<button
 				type="button"
 				class="btn variant-filled-error"
