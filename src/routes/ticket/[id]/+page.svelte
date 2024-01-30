@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
+	import { goto, invalidate } from '$app/navigation';
 	import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	import { formatDate } from '$lib/utils/formatDate';
@@ -38,10 +38,20 @@
 		body: 'Provide a message with any additional information.',
 		// Populates the input value and attributes
 		value: '',
-		valueAttr: { type: 'text', minlength: 3, maxlength: 10, required: true },
+		valueAttr: { type: 'text', minlength: 3, required: true },
 		buttonTextSubmit: 'Add Note',
 		// Returns the updated response value
-		response: (r: string) => console.log('response:', r)
+		response: async (r: string) => {
+			if (!r) return;
+			await fetch('/api/notes', {
+				method: 'POST',
+				body: JSON.stringify({ ticketId: ticket?._id, message: r }),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+			invalidate('app:notes');
+		}
 	};
 </script>
 
@@ -109,22 +119,21 @@
 
 			Add Note
 		</button>
-		<div class="space-y-4">
-			<div class="card p-4 variant-ghost">
-				<div class="flex justify-between">
-					<p>Note from Customer</p>
-					<p>01/25/24</p>
-				</div>
-				<p>Hello</p>
+		{#if ticket?.notes && ticket?.notes?.length > 0}
+			<div class="space-y-4">
+				{#each ticket.notes as note (note._id)}
+					<div class="card p-4 variant-ghost">
+						<div class="flex justify-between">
+							<p>Note from Customer</p>
+							{#if note.createdAt}
+								<p>{formatDate(new Date(note.createdAt))}</p>
+							{/if}
+						</div>
+						<p>{note.message}</p>
+					</div>
+				{/each}
 			</div>
-			<div class="card p-4 variant-ghost">
-				<div class="flex justify-between">
-					<p>Note from Support</p>
-					<p>01/25/24</p>
-				</div>
-				<p>We are on the problem like Donkey Kong!</p>
-			</div>
-		</div>
+		{/if}
 		<div class="grid" class:hidden={ticket?.status === 'closed'}>
 			<button
 				type="button"

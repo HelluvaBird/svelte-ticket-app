@@ -3,6 +3,7 @@ export type TicketModelType = {
 	product: string;
 	description: string;
 	status: string;
+	notes?: NoteModelType[];
 	createdAt?: Date;
 	updatedAt?: Date;
 };

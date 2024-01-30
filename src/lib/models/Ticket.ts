@@ -1,5 +1,6 @@
 import type { TicketModelType } from '$lib/types/types';
 import mongoose from 'mongoose';
+import { NoteModel } from './Note';
 
 const ticketSchema = new mongoose.Schema(
 	{
@@ -21,6 +22,12 @@ const ticketSchema = new mongoose.Schema(
 	},
 	{ timestamps: true }
 );
+
+ticketSchema.virtual('notes', {
+	ref: NoteModel,
+	localField: '_id',
+	foreignField: 'ticketId'
+});
 
 export const TicketModel: mongoose.Model<TicketModelType> =
 	mongoose.models.Ticket ?? mongoose.model<TicketModelType>('Ticket', ticketSchema);
