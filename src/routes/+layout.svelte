@@ -94,7 +94,7 @@
 			</AppRailAnchor>
 			<!-- --- -->
 			<svelte:fragment slot="trail">
-				<AppRailAnchor href="/" target="_blank" title="Account">
+				<AppRailAnchor href="/login" title="Account">
 					<svelte:fragment slot="lead">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
