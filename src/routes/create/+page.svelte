@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import type { PageData } from './$types';
+	import type { ActionData, PageData } from './$types';
 	export let data: PageData;
+	export let form: ActionData;
 </script>
 
 {#if data.user}
@@ -31,7 +32,7 @@
 
 			<label class="label">
 				<span>Product</span>
-				<select class="select" name="product">
+				<select class="select" name="product" value={form?.product ?? 'iPhone/iPad'}>
 					<option value="iPhone/iPad">iPhone/iPad</option>
 					<option value="Macbook">Macbook</option>
 					<option value="Apple Watch">Apple Watch</option>
@@ -42,6 +43,7 @@
 				<textarea
 					name="description"
 					class="textarea"
+					class:input-error={form?.description?.missing}
 					rows="4"
 					placeholder="Please add a detailed description of the issue"
 				/>
