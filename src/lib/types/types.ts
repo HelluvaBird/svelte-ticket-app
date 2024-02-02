@@ -15,3 +15,8 @@ export type NoteModelType = {
 	createdAt?: Date;
 	updatedAt?: Date;
 };
+
+export type SessionUserType = {
+	name: string;
+	email: string;
+};
