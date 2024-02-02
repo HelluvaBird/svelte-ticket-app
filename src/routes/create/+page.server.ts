@@ -2,8 +2,10 @@ import { TicketModel } from '$lib/models/Ticket';
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 
-export const load = (async () => {
-	return {};
+export const load = (async ({ locals }) => {
+	return {
+		user: locals.user
+	};
 }) satisfies PageServerLoad;
 
 export const actions = {

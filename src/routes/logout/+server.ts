@@ -7,5 +7,5 @@ export const GET: RequestHandler = async ({ cookies, url }) => {
 		expires: new Date(0)
 	});
 
-	throw redirect(303, url.searchParams.get('redirect') ?? '/');
+	redirect(303, url.searchParams.get('redirect') ?? '/');
 };
