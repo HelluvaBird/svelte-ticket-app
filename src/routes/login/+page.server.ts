@@ -18,7 +18,7 @@ type ErrorObjectType = {
 };
 
 export const actions: Actions = {
-	default: async ({ request, cookies }) => {
+	default: async ({ request, cookies, url }) => {
 		const formData = await request.formData();
 		const error: ErrorObjectType = {};
 		const email = formData.get('email');
@@ -47,6 +47,6 @@ export const actions: Actions = {
 			maxAge: 60 * 60 * 24 * 2
 		});
 
-		redirect(303, '/');
+		redirect(303, url.searchParams.get('redirect') ?? '/');
 	}
 };

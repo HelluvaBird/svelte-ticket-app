@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	export let data: PageData;
 </script>
@@ -78,7 +79,8 @@
 				</div>
 				<!-- Actions -->
 				<div class="alert-actions">
-					<a href="/login" class="btn variant-filled-primary">Login</a>
+					<a href="/login?redirect={$page.url.pathname}" class="btn variant-filled-primary">Login</a
+					>
 				</div>
 			</aside>
 		</div>
