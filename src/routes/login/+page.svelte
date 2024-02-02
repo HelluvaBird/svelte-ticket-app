@@ -3,7 +3,6 @@
 
 	export let data: PageData;
 	export let form: ActionData;
-	$: console.log(form);
 </script>
 
 <div class="max-w-[56rem] h-full mx-auto flex justify-center items-center p-10">

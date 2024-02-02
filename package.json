@@ -21,6 +21,7 @@
     "@tailwindcss/typography": "0.5.10",
     "@types/eslint": "8.56.0",
     "@types/node": "20.11.7",
+    "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "autoprefixer": "10.4.17",
@@ -40,6 +41,7 @@
   },
   "type": "module",
   "dependencies": {
-    "mongoose": "^8.1.1"
+    "mongoose": "^8.1.1",
+    "uuid": "^9.0.1"
   }
 }

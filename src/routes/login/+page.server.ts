@@ -1,5 +1,7 @@
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+import { dev } from '$app/environment';
+import { v4 as uuid } from 'uuid';
 
 export const load = (async () => {
 	return {};
@@ -16,7 +18,7 @@ type ErrorObjectType = {
 };
 
 export const actions: Actions = {
-	default: async ({ request }) => {
+	default: async ({ request, cookies }) => {
 		const formData = await request.formData();
 		const error: ErrorObjectType = {};
 		const email = formData.get('email');
@@ -36,5 +38,15 @@ export const actions: Actions = {
 		if (error.email?.missing || error.password?.missing) {
 			return fail(400, error);
 		}
+		const sessionId = uuid();
+		cookies.set('session', sessionId, {
+			path: '/',
+			httpOnly: true,
+			sameSite: 'strict',
+			secure: !dev,
+			maxAge: 60 * 60 * 24 * 2
+		});
+
+		redirect(303, '/');
 	}
 };
