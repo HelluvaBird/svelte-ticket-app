@@ -6,7 +6,7 @@
 	import { formatDate } from '$lib/utils/formatDate';
 
 	export let data: PageData;
-	$: ({ ticket } = data);
+	$: ({ ticket, user } = data);
 
 	const modalStore = getModalStore();
 	let loading = false;
@@ -71,7 +71,6 @@
 			<p>Date Submitted: {formatDate(ticket?.createdAt)}</p>
 		{/if}
 		<p>Product: {ticket?.product}</p>
-		<hr />
 		<div class="alert variant-filled">
 			<div class="hidden sm:block">
 				<svg
@@ -95,30 +94,60 @@
 				<p>{ticket?.description}</p>
 			</div>
 		</div>
+		<hr />
+		<div class:hidden={ticket?.status === 'closed' || !user}>
+			<div class="space-y-4">
+				<p>Actions</p>
+				<div class="flex items-center justify-between">
+					<button
+						type="button"
+						class="btn variant-filled-primary"
+						class:hidden={ticket?.status === 'closed'}
+						on:click={() => modalStore.trigger(addNoteModal)}
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="w-6 h-6"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+							/>
+						</svg>
+						Add Note
+					</button>
+					<button
+						type="button"
+						class="btn variant-filled-error"
+						on:click={() => modalStore.trigger(closeTicketModal)}
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="w-6 h-6"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+							/>
+						</svg>
+						Close Ticket
+					</button>
+				</div>
+			</div>
+			<hr class="mt-4" />
+		</div>
 		<p>Notes</p>
-		<button
-			type="button"
-			class="btn variant-filled-primary"
-			class:hidden={ticket?.status === 'closed'}
-			on:click={() => modalStore.trigger(addNoteModal)}
-		>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke-width="1.5"
-				stroke="currentColor"
-				class="w-6 h-6"
-			>
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-				/>
-			</svg>
 
-			Add Note
-		</button>
 		{#if ticket?.notes && ticket?.notes?.length > 0}
 			<div class="space-y-4">
 				{#each ticket.notes as note (note._id)}
@@ -134,29 +163,5 @@
 				{/each}
 			</div>
 		{/if}
-		<div class="grid" class:hidden={ticket?.status === 'closed'}>
-			<button
-				type="button"
-				class="btn variant-filled-error"
-				on:click={() => modalStore.trigger(closeTicketModal)}
-			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke-width="1.5"
-					stroke="currentColor"
-					class="w-6 h-6"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-					/>
-				</svg>
-
-				Close Ticket
-			</button>
-		</div>
 	</div>
 </div>
