@@ -47,6 +47,8 @@ export const actions: Actions = {
 			maxAge: 60 * 60 * 24 * 2
 		});
 
-		redirect(303, url.searchParams.get('redirect') ?? '/');
+		const redirectTo = `/${url.searchParams.get('redirect')?.slice(1)}` ?? '/';
+
+		redirect(303, redirectTo);
 	}
 };
